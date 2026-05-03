@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <link rel="icon" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <meta name="theme-color" content="#0d0d1a">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メモ</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0d0d1a;
+      color: #c8c8d8;
+      font-family: 'Consolas', 'Courier New', monospace;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+      gap: 10px;
+    }
+
+    #toolbar {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    button {
+      background: #1a1a2e;
+      color: #c8c8d8;
+      border: 1px solid #2a2a4a;
+      padding: 6px 16px;
+      font-family: inherit;
+      font-size: 13px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.15s, color 0.15s;
+      outline: none;
+    }
+
+    button:hover {
+      background: #25253f;
+    }
+
+    button:active {
+      background: #2e2e50;
+    }
+
+    #btn-copy:hover {
+      color: #ae8b2d;
+      border-color: #ae8b2d;
+    }
+
+    #btn-reset:hover {
+      color: #7a3a3a;
+      border-color: #7a3a3a;
+    }
+
+    #notice {
+      font-size: 12px;
+      color: #4a4a6a;
+      margin-left: auto;
+    }
+
+    #memo {
+      flex: 1;
+      background: #0a0a16;
+      color: #c8c8d8;
+      border: 1px solid #1e1e3a;
+      border-radius: 4px;
+      padding: 12px;
+      font-family: inherit;
+      font-size: 14px;
+      line-height: 1.7;
+      resize: none;
+      outline: none;
+      caret-color: #ae8b2d;
+    }
+
+    #memo:focus {
+      border-color: #2e2e5a;
+    }
+
+    #memo::placeholder {
+      color: #2e2e4e;
+    }
+
+    #toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(10px);
+      background: #ae8b2d;
+      color: #0d0d1a;
+      padding: 6px 18px;
+      border-radius: 4px;
+      font-size: 13px;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+    }
+
+    #toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="toolbar">
+    <button id="btn-copy">コピー</button>
+    <button id="btn-reset">リセット</button>
+    <span id="notice">閉じると消えます</span>
+  </div>
+
+  <textarea id="memo" placeholder="ここに書く..."></textarea>
+
+  <div id="toast">コピーしました</div>
+
+  <script>
+    const memo = document.getElementById('memo');
+    const toast = document.getElementById('toast');
+
+    document.getElementById('btn-copy').addEventListener('click', () => {
+      const text = memo.value;
+      if (!text) return;
+      navigator.clipboard.writeText(text).then(() => {
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1500);
+      });
+    });
+
+    document.getElementById('btn-reset').addEventListener('click', () => {
+      memo.value = '';
+      memo.focus();
+    });
+
+    memo.focus();
+  </script>
+</body>
+
+</html>
